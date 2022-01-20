@@ -44,7 +44,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
     LocalDatabase.insertGameMatch(
       GameMatch(
-        timestamp: DateTime.now().toUtc().microsecondsSinceEpoch,
+        timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
         success: 0,
         attempts: 0,
       ),

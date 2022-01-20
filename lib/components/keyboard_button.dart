@@ -50,16 +50,10 @@ class _KeyboardButtonState extends State<KeyboardButton> {
   }
 
   Future showSuccessDialog() async {
-    List<GameMatch> gameMatches = await LocalDatabase.getAllGameMatches();
-    int numOfSuccess = await LocalDatabase.getNumberOfGameMatchWithSuccess();
-    double winPercentage = numOfSuccess * 100 / gameMatches.length;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SuccessDialog(
-          numOfGamesPlayed: gameMatches.length,
-          winPercentage: winPercentage,
-        );
+        return const SuccessDialog();
       },
     );
   }
@@ -69,7 +63,7 @@ class _KeyboardButtonState extends State<KeyboardButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await HapticFeedback.vibrate();
+        HapticFeedback.vibrate();
 
         String _letter = widget.letter.toUpperCase();
         int _index = wordleBRBrain.getWordAttemptIndex();

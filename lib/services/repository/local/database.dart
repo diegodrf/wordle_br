@@ -36,7 +36,6 @@ class LocalDatabase {
   static Future<List<GameMatch>> getAllGameMatches() async {
     final List<Map<String, dynamic>> gameMatches =
         await database.query(TableGameMatches.tableName);
-    print(gameMatches);
     return List.generate(
         gameMatches.length, (index) => GameMatch.fromMap(gameMatches[index]));
   }
@@ -64,6 +63,17 @@ class LocalDatabase {
       TableGameMatches.tableName,
       where: '${TableGameMatches.columnSuccess} = ?',
       whereArgs: [0],
+    );
+    return gameMatches.length;
+  }
+
+  static Future<int> getNumberOfGameMatchWithSuccessPerAttempts(
+      int attemptIndex) async {
+    final List<Map<String, dynamic>> gameMatches = await database.query(
+      TableGameMatches.tableName,
+      where: '''${TableGameMatches.columnAttempts} = ? 
+        AND ${TableGameMatches.columnSuccess} = ?''',
+      whereArgs: [attemptIndex, 1],
     );
     return gameMatches.length;
   }

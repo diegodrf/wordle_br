@@ -25,6 +25,10 @@ class GameMatch {
     };
   }
 
+  DateTime getTimestampAsDateTime() {
+    return DateTime.fromMillisecondsSinceEpoch(timestamp);
+  }
+
   factory GameMatch.fromMap(Map<String, dynamic> mapObject) {
     return GameMatch(
       id: mapObject['id'],
@@ -36,6 +40,13 @@ class GameMatch {
 
   @override
   String toString() {
-    return 'GameMatch{id: $id, timestamp: $timestamp, success: $success, attempts: $attempts}';
+    Map<String, dynamic> fields = {
+      'id': id,
+      'timestamp': timestamp,
+      'timestampAsDateTime': getTimestampAsDateTime(),
+      'success': success,
+      'attempts': attempts
+    };
+    return 'GameMatch ${fields.toString()}';
   }
 }
