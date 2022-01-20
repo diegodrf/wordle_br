@@ -4,6 +4,8 @@ import 'package:wordle_br/components/word_attempts_box.dart';
 import 'package:wordle_br/components/game_title.dart';
 import 'package:wordle_br/core/ui_brain.dart';
 import 'package:wordle_br/core/wordlebr_brain.dart';
+import 'package:wordle_br/models/game_match.dart';
+import 'package:wordle_br/services/repository/local/database.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -21,6 +23,12 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     setState(() {});
   }
 
+  void getGames() async {
+    for (GameMatch gameMatch in await LocalDatabase.getAllGameMatches()) {
+      print(gameMatch);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +41,15 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         setState(() {});
       });
     animationController.repeat();
+
+    LocalDatabase.insertGameMatch(
+      GameMatch(
+        timestamp: DateTime.now().toUtc().microsecondsSinceEpoch,
+        success: 0,
+        attempts: 0,
+      ),
+    );
+    getGames();
   }
 
   @override

@@ -3,7 +3,8 @@ import 'package:wordle_br/screens/game_page.dart';
 import 'package:wordle_br/services/repository/local/database.dart';
 
 void main() async {
-  LocalDatabase.startDatabase();
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalDatabase.startDatabase();
   runApp(const WordleBr());
 }
 

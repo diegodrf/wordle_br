@@ -23,4 +23,18 @@ class GameMatch {
       'attempts': attempts
     };
   }
+
+  factory GameMatch.fromMap(Map<String, dynamic> mapObject) {
+    return GameMatch(
+      id: mapObject['id'],
+      timestamp: mapObject['timestamp'],
+      success: mapObject['success'],
+      attempts: mapObject['attempts'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'GameMatch{id: $id, timestamp: $timestamp, success: $success, attempts: $attempts}';
+  }
 }
