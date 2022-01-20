@@ -40,4 +40,13 @@ class LocalDatabase {
     return List.generate(
         gameMatches.length, (index) => GameMatch.fromMap(gameMatches[index]));
   }
+
+  static Future<GameMatch> getGameMatch(int id) async {
+    final List<Map<String, dynamic>> gameMatch = await database.query(
+      TableGameMatches.tableName,
+      where: '${TableGameMatches.columnId} = ?',
+      whereArgs: [id],
+    );
+    return GameMatch.fromMap(gameMatch.first);
+  }
 }
