@@ -2,7 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SuccessDialog extends StatelessWidget {
-  const SuccessDialog({Key? key}) : super(key: key);
+  final int numOfGamesPlayed;
+  final double winPercentage;
+
+  const SuccessDialog({
+    Key? key,
+    required this.numOfGamesPlayed,
+    required this.winPercentage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +24,11 @@ class SuccessDialog extends StatelessWidget {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Statistics(value: 2, description: 'Played'),
-            Statistics(value: 100, description: 'Win %'),
-            Statistics(value: 1, description: 'Current Streak'),
-            Statistics(value: 1, description: 'Max Streak'),
+          children: [
+            Statistics(value: numOfGamesPlayed, description: 'Played'),
+            Statistics(value: winPercentage.toInt(), description: 'Win %'),
+            const Statistics(value: 1, description: 'Current Streak'),
+            const Statistics(value: 1, description: 'Max Streak'),
           ],
         ),
         const Text(

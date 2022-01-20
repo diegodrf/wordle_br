@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_br/core/ui_brain.dart';
 import 'package:wordle_br/core/wordlebr_brain.dart';
+import 'package:wordle_br/models/game_match.dart';
 import 'package:wordle_br/models/wordlebr_model.dart';
+import 'package:wordle_br/services/repository/local/database.dart';
 import 'package:wordle_br/services/wordle_api.dart';
 import 'package:wordle_br/components/success_dialog.dart';
 import 'package:wordle_br/utils/utils.dart';
@@ -48,10 +50,16 @@ class _KeyboardButtonState extends State<KeyboardButton> {
   }
 
   Future showSuccessDialog() async {
+    List<GameMatch> gameMatches = await LocalDatabase.getAllGameMatches();
+    int numOfSuccess = await LocalDatabase.getNumberOfGameMatchWithSuccess();
+    double winPercentage = numOfSuccess * 100 / gameMatches.length;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const SuccessDialog();
+        return SuccessDialog(
+          numOfGamesPlayed: gameMatches.length,
+          winPercentage: winPercentage,
+        );
       },
     );
   }
@@ -87,8 +95,23 @@ class _KeyboardButtonState extends State<KeyboardButton> {
             uiBrain.showProgressBar = false;
             widget.callbackNotify();
             if (wordleBRBrain
+                // Success. Discovered the word
                 .getResult(_index)
                 .every((element) => element == 1)) {
+              var allGameMatches = await LocalDatabase.getAllGameMatches();
+              allGameMatches.sort((a, b) => a.id!.compareTo(b.id!));
+              GameMatch lastGameMatch = allGameMatches.last;
+              lastGameMatch.success = 1;
+              lastGameMatch.attempts = _index + 1;
+              await LocalDatabase.updateGameMatch(lastGameMatch);
+
+              await showSuccessDialog();
+            }
+            if (wordleBRBrain.getWordAttemptIndex() == 6 &&
+                // Fail. Used all attempts and didn't discover de word
+                wordleBRBrain
+                    .getResult(_index)
+                    .any((element) => element != 1)) {
               await showSuccessDialog();
             }
           }

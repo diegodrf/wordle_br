@@ -36,7 +36,7 @@ class LocalDatabase {
   static Future<List<GameMatch>> getAllGameMatches() async {
     final List<Map<String, dynamic>> gameMatches =
         await database.query(TableGameMatches.tableName);
-
+    print(gameMatches);
     return List.generate(
         gameMatches.length, (index) => GameMatch.fromMap(gameMatches[index]));
   }
@@ -48,5 +48,32 @@ class LocalDatabase {
       whereArgs: [id],
     );
     return GameMatch.fromMap(gameMatch.first);
+  }
+
+  static Future<int> getNumberOfGameMatchWithSuccess() async {
+    final List<Map<String, dynamic>> gameMatches = await database.query(
+      TableGameMatches.tableName,
+      where: '${TableGameMatches.columnSuccess} = ?',
+      whereArgs: [1],
+    );
+    return gameMatches.length;
+  }
+
+  static Future<int> getNumberOfGameMatchWithFail() async {
+    final List<Map<String, dynamic>> gameMatches = await database.query(
+      TableGameMatches.tableName,
+      where: '${TableGameMatches.columnSuccess} = ?',
+      whereArgs: [0],
+    );
+    return gameMatches.length;
+  }
+
+  static Future updateGameMatch(GameMatch gameMatch) async {
+    await database.update(
+      TableGameMatches.tableName,
+      gameMatch.toMap(),
+      where: '${TableGameMatches.columnId} = ?',
+      whereArgs: [gameMatch.id],
+    );
   }
 }

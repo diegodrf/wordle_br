@@ -5,8 +5,9 @@ class GameMatch {
   final int timestamp;
 
   // Sqflite don't allow bool type, so success field store bool as int 0 or 1
-  final int success;
-  final int attempts;
+  int success;
+
+  int attempts;
 
   GameMatch({
     this.id,
