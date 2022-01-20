@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_br/screens/game_page.dart';
+import 'package:wordle_br/services/repository/local/database.dart';
 
-void main() {
+void main() async {
+  LocalDatabase.startDatabase();
   runApp(const WordleBr());
 }
 
